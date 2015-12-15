@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="urn:despatchbay" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:despatchbay" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:despatchbay">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <xsd:complexType name="AddressKeyType">
+        <xsd:all>
+          <xsd:element name="Key" type="xsd:string" />
+          <xsd:element name="Address" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="CountryType">
+        <xsd:all>
+          <xsd:element name="Code" type="xsd:string" />
+          <xsd:element name="Name" type="xsd:string" />
+          <xsd:element name="Transit" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="AddressDetailType">
+        <xsd:all>
+          <xsd:element minOccurs="0" name="CompanyName" type="xsd:string" />
+          <xsd:element name="Street" type="xsd:string" />
+          <xsd:element name="Locality" type="xsd:string" />
+          <xsd:element name="Town" type="xsd:string" />
+          <xsd:element name="County" type="xsd:string" />
+          <xsd:element name="Country" type="xsd:string" />
+          <xsd:element name="Postcode" type="xsd:string" />
+          <xsd:element name="Key" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfAddressKeyType">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="tns:AddressKeyType[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfCountryType">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="tns:CountryType[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="GetDomesticAddressByLookupRequest">
+    <wsdl:part name="postcode" type="xsd:string" />
+    <wsdl:part name="property" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDomesticAddressByLookupResponse">
+    <wsdl:part name="return" type="tns:AddressDetailType" />
+  </wsdl:message>
+  <wsdl:message name="GetDomesticAddressByKeyRequest">
+    <wsdl:part name="key" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDomesticAddressByKeyResponse">
+    <wsdl:part name="return" type="tns:AddressDetailType" />
+  </wsdl:message>
+  <wsdl:message name="GetDomesticAddressKeysByPostcodeRequest">
+    <wsdl:part name="postcode" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDomesticAddressKeysByPostcodeResponse">
+    <wsdl:part name="return" type="tns:ArrayOfAddressKeyType" />
+  </wsdl:message>
+  <wsdl:portType name="AddressingServicePortType">
+    <wsdl:operation name="GetDomesticAddressByLookup">
+      <documentation>Returns an address by searching on a given postcode/property combination</documentation>
+      <wsdl:input message="tns:GetDomesticAddressByLookupRequest" />
+      <wsdl:output message="tns:GetDomesticAddressByLookupResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDomesticAddressByKey">
+      <documentation>Returns the address relating to a given AddressKey (as returned by GetDomesticAddressKeysByPostcode)</documentation>
+      <wsdl:input message="tns:GetDomesticAddressByKeyRequest" />
+      <wsdl:output message="tns:GetDomesticAddressByKeyResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDomesticAddressKeysByPostcode">
+      <documentation>Returns all known addresses (with addressKeys) for a given postcode</documentation>
+      <wsdl:input message="tns:GetDomesticAddressKeysByPostcodeRequest" />
+      <wsdl:output message="tns:GetDomesticAddressKeysByPostcodeResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AddressingServiceBinding" type="tns:AddressingServicePortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="GetDomesticAddressByLookup">
+      <soap:operation soapAction="urn:despatchbay#GetDomesticAddressByLookup" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDomesticAddressByKey">
+      <soap:operation soapAction="urn:despatchbay#GetDomesticAddressByKey" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDomesticAddressKeysByPostcode">
+      <soap:operation soapAction="urn:despatchbay#GetDomesticAddressKeysByPostcode" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AddressingService">
+    <wsdl:port name="AddressingServicePort" binding="tns:AddressingServiceBinding">
+      <soap:address location="http://api.despatchbaypro.com/soap/v11/addressing.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

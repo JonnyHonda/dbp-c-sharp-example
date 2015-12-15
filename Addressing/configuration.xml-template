@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+	<apiuser></apiuser>
+	<apikey>1</apikey>
+	<apiendpoint>http://api.despatchbaypro.com/soap/v11/addressing.php</apiendpoint>
+</configuration>
