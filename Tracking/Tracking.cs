@@ -71,16 +71,28 @@ namespace Tracking
 			 * Demonstrate Getting tracking information
 			 * 
 			 **/
+			// Test if input arguments were supplied:
+			if (args.Length == 0)
+			{
+				System.Console.WriteLine("Please enter a tracking number.");
+				System.Console.WriteLine("Usage: Tracking.exe PBBQ3451945001");
+				return;
+			}
+			string trackingNumber = args[0];
 			Console.WriteLine ("\n\n\n============================================");
 			Console.WriteLine ("Calling GetTracking");
 			TrackingType[] trackingDetail = null;
-			trackingDetail = GetTrackingMethod ("FG028036929GB");
-			int count = 0;
-			Console.WriteLine ("The following tracking events found");
-			foreach (TrackingType element in trackingDetail) {
-				count += 1;
-				Console.WriteLine ("Key #{0}, Code:{1}, Date:{2}, Description:{3}, Location:{4}, Signitory:{5}, Time:{6}", 
-					count, element.Code, element.Date, element.Description, element.Location, element.Signatory, element.Time);
+			trackingDetail = GetTrackingMethod (trackingNumber);
+				int count = 0;
+				Console.WriteLine ("The following tracking events found");
+			try{
+				foreach (TrackingType element in trackingDetail) {
+					count += 1;
+					Console.WriteLine ("Key #{0}, Code:{1}, Date:{2}, Description:{3}, Location:{4}, Signitory:{5}, Time:{6}", 
+						count, element.Code, element.Date, element.Description, element.Location, element.Signatory, element.Time);
+				}
+			}catch(Exception ex){
+				Console.WriteLine ("No tracking available for {0}", args[0]);
 			}
 		}
 	}

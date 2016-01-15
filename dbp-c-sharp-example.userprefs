@@ -1,8 +1,9 @@
 ﻿<Properties StartupItem="Addressing/Addressing.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Shipping/Shipping.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Tracking/Tracking.cs">
     <Files>
-      <File FileName="Shipping/Shipping.cs" Line="130" Column="75" />
+      <File FileName="Tracking/configuration.xml" Line="4" Column="17" />
+      <File FileName="Tracking/Tracking.cs" Line="78" Column="65" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
