@@ -1,7 +1,8 @@
 ﻿using System;
-using Tracking.api.despatchbaypro.com;
 using System.Net;
 using System.Xml;
+using Tracking.api.despatchbay.com;
+
 
 namespace Tracking
 {
@@ -51,9 +52,9 @@ namespace Tracking
 			}
 		}
 
-		public static TrackingType[] GetTrackingMethod (string trackingcode)
+		public static TrackingReturnType GetTrackingMethod (string trackingcode)
 		{
-			TrackingType[] trackingDetail = null;
+            TrackingReturnType trackingDetail = null;
 			var Service = GetAuthoriseService ();
 			try {
 				// Call the GetDomesticAddressByKey soap service
@@ -81,12 +82,15 @@ namespace Tracking
 			string trackingNumber = args[0];
 			Console.WriteLine ("\n\n\n============================================");
 			Console.WriteLine ("Calling GetTracking");
-			TrackingType[] trackingDetail = null;
+            TrackingReturnType trackingDetail = null;
 			trackingDetail = GetTrackingMethod (trackingNumber);
+            Console.WriteLine("Tracking Detail for Courier {0}",trackingDetail.CourierName);
+            Console.WriteLine("Service {0}", trackingDetail.ServiceName);
+            Console.WriteLine("Tracking Type {0}", trackingDetail.TrackingType);
 				int count = 0;
 				Console.WriteLine ("The following tracking events found");
 			try{
-				foreach (TrackingType element in trackingDetail) {
+				foreach (TrackingEventType element in trackingDetail.TrackingHistory) {
 					count += 1;
 					Console.WriteLine ("Key #{0}, Code:{1}, Date:{2}, Description:{3}, Location:{4}, Signitory:{5}, Time:{6}", 
 						count, element.Code, element.Date, element.Description, element.Location, element.Signatory, element.Time);

@@ -37,31 +37,32 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tracking.cs" />
-    <Compile Include="Web References\api.despatchbaypro.com\Reference.cs">
+    <Compile Include="Web References\api.despatchbay.com\Reference.cs">
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <WebReferences Include="Web References" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferenceUrl Include="http://api.despatchbaypro.com/soap/v11/tracking?wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\api.despatchbaypro.com</RelPath>
-      <UpdateFromURL>http://api.despatchbaypro.com/soap/v11/tracking?wsdl</UpdateFromURL>
-    </WebReferenceUrl>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Web References\api.despatchbaypro.com\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <None Include="configuration.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="configuration.xml-template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Web References\api.despatchbay.com\tracking.wsdl" />
+    <None Include="Web References\api.despatchbay.com\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://api.despatchbay.com/soap/v14/tracking.php?wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\api.despatchbay.com</RelPath>
+      <UpdateFromURL>http://api.despatchbay.com/soap/v14/tracking.php?wsdl</UpdateFromURL>
+    </WebReferenceUrl>
   </ItemGroup>
 </Project>

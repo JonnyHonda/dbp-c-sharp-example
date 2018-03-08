@@ -17,7 +17,7 @@
           </xsd:restriction>
         </xsd:complexContent>
       </xsd:complexType>
-      <xsd:complexType name="TrackingType">
+      <xsd:complexType name="TrackingEventType">
         <xsd:all>
           <xsd:element name="Date" type="xsd:string" />
           <xsd:element name="Time" type="xsd:string" />
@@ -27,12 +27,22 @@
           <xsd:element name="Signatory" type="xsd:string" />
         </xsd:all>
       </xsd:complexType>
-      <xsd:complexType name="ArrayOfTrackingType">
+      <xsd:complexType name="ArrayOfTrackingEventType">
         <xsd:complexContent mixed="false">
           <xsd:restriction base="SOAP-ENC:Array">
-            <xsd:attribute wsdl:arrayType="tns:TrackingType[]" ref="SOAP-ENC:arrayType" />
+            <xsd:attribute wsdl:arrayType="tns:TrackingEventType[]" ref="SOAP-ENC:arrayType" />
           </xsd:restriction>
         </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="TrackingReturnType">
+        <xsd:all>
+          <xsd:element name="CourierName" type="xsd:string" />
+          <xsd:element name="CourierID" type="xsd:int" />
+          <xsd:element name="ServiceName" type="xsd:string" />
+          <xsd:element name="ServiceID" type="xsd:int" />
+          <xsd:element name="TrackingType" type="xsd:string" />
+          <xsd:element name="TrackingHistory" type="tns:ArrayOfTrackingEventType" />
+        </xsd:all>
       </xsd:complexType>
     </xsd:schema>
   </wsdl:types>
@@ -40,7 +50,7 @@
     <wsdl:part name="trackingNumber" type="xsd:string" />
   </wsdl:message>
   <wsdl:message name="GetTrackingResponse">
-    <wsdl:part name="return" type="tns:ArrayOfTrackingType" />
+    <wsdl:part name="return" type="tns:TrackingReturnType" />
   </wsdl:message>
   <wsdl:portType name="TrackingServicePortType">
     <wsdl:operation name="GetTracking">
@@ -63,7 +73,7 @@
   </wsdl:binding>
   <wsdl:service name="TrackingService">
     <wsdl:port name="TrackingServicePort" binding="tns:TrackingServiceBinding">
-      <soap:address location="http://api.despatchbaypro.com/soap/v11/tracking.php" />
+      <soap:address location="http://api.despatchbay.com/soap/v14/tracking.php" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
