@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Web.Services;
-using System.Web.Services.Protocols;
 using System.Net;
 using System.Xml;
 using Shipping.api.despatchbay.com;
@@ -98,41 +96,48 @@ namespace wsdlConsole
                 Parcel.Weight = 100;
                 Parcel.Value = 100;
 
+                // Obviously we could add more parcels here
                 ParcelType[] Parcels = new ParcelType[1];
                 Parcels[0] = Parcel;
 
-                // Sender Address
                 AddressType Address = new AddressType();
-                Address.Street = "4077 Korea Street";
-                Address.TownCity = "Lincoln";
-                Address.PostalCode = "LN6 3QR";
-                Address.CountryCode = "GB";
 
-                // Receipient Address
+                // Receipient Details
                 RecipientAddressType RecipientAddress = new RecipientAddressType();
                 RecipientAddress.RecipientName = "Cprl Klingor";
                 RecipientAddress.RecipientEmail = "klingor@gmail.com";
                 RecipientAddress.RecipientTelephone = "01522 76767676";
-                RecipientAddress.RecipientAddress = Address;
 
-                // Sender Address
-               // Address = null;
-                Address.Street = "Shropshire Street";
+                Address.CompanyName = "The SaleGroup";
+                Address.Street = "Unit 6 The Regatta";
+                Address.Locality = "Henley Way";
                 Address.TownCity = "Lincoln";
-                Address.PostalCode = "LN1 2UE";
+                Address.County = "Lincolnshire";
+                Address.PostalCode = "LN6 3QR";
                 Address.CountryCode = "GB";
 
+                RecipientAddress.RecipientAddress = Address;
+
+                // Sender Details
                 SenderAddressType SenderAddress = new SenderAddressType();
                 SenderAddress.SenderName = "Hawkeye Pearce";
-                SenderAddress.SenderAddress = Address;
                 SenderAddress.SenderEmail = "john.burrin@thesalegroup.co.uk";
                 SenderAddress.SenderTelephone = "01522 000000";
 
+                Address.Street = "West Parade ";
+                Address.TownCity = "Lincoln";
+                Address.PostalCode = "LN1 1YP";
+                Address.County = "Lincolnshire";
+                Address.CountryCode = "GB";
+
+                SenderAddress.SenderAddress = Address;
+
+                // Put the Shipment together
                 Shipment.Parcels = Parcels;
                 Shipment.RecipientAddress = RecipientAddress;
                 Shipment.SenderAddress = SenderAddress;
 
-
+                // Call the service
                 availableServices = GetAvailableServicesMethod (Shipment);
 
 				// iterate though the list of returned services
