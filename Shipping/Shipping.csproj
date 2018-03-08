@@ -43,26 +43,26 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <WebReferences Include="Web References" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferenceUrl Include="http://api.despatchbaypro.com/soap/v11/shipping?wsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\api.despatchbaypro.com</RelPath>
-      <UpdateFromURL>http://api.despatchbaypro.com/soap/v11/shipping?wsdl</UpdateFromURL>
-    </WebReferenceUrl>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\..\shipping.wsdl" />
-    <None Include="Web References\api.despatchbaypro.com\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <None Include="configuration.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="configuration.xml-template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Web References\api.despatchbaypro.com\shipping.wsdl" />
+    <None Include="Web References\api.despatchbaypro.com\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://api.despatchbaypro.com/soap/v14/shipping.php?wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\api.despatchbaypro.com</RelPath>
+      <UpdateFromURL>http://api.despatchbaypro.com/soap/v14/shipping.php?wsdl</UpdateFromURL>
+    </WebReferenceUrl>
   </ItemGroup>
 </Project>

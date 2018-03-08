@@ -53,7 +53,6 @@
     </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\tracking.wsdl" />
     <None Include="Web References\api.despatchbaypro.com\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

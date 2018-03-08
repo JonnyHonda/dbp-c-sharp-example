@@ -4,11 +4,79 @@
     <xsd:schema targetNamespace="urn:despatchbay">
       <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
       <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <xsd:complexType name="AddressType">
+        <xsd:all>
+          <xsd:element minOccurs="0" maxOccurs="1" name="CompanyName" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Street" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="Locality" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="TownCity" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="County" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="PostalCode" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="CountryCode" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="CountryType">
+        <xsd:all>
+          <xsd:element minOccurs="1" maxOccurs="1" name="CountryCode" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="CountryName" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfCountryType">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="tns:CountryType[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="CollectionDateType">
+        <xsd:all>
+          <xsd:element minOccurs="1" maxOccurs="1" name="CollectionDate" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfCollectionDateType">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="tns:CollectionDateType[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="CourierType">
+        <xsd:all>
+          <xsd:element minOccurs="1" maxOccurs="1" name="CourierID" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="CourierName" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfCourierType">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="tns:CourierType[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ParcelType">
+        <xsd:all>
+          <xsd:element minOccurs="1" maxOccurs="1" name="Weight" type="xsd:float" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Length" type="xsd:float" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Width" type="xsd:float" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Height" type="xsd:float" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Contents" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Value" type="xsd:float" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfParcelType">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="tns:ParcelType[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
       <xsd:complexType name="ServiceType">
         <xsd:all>
-          <xsd:element name="ServiceID" type="xsd:int" />
-          <xsd:element name="Name" type="xsd:string" />
-          <xsd:element name="Cost" type="xsd:float" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="ServiceID" type="xsd:int" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Name" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Cost" type="xsd:float" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Courier" type="tns:CourierType" />
         </xsd:all>
       </xsd:complexType>
       <xsd:complexType name="ArrayOfServiceType">
@@ -18,70 +86,68 @@
           </xsd:restriction>
         </xsd:complexContent>
       </xsd:complexType>
+      <xsd:complexType name="RecipientAddressType">
+        <xsd:all>
+          <xsd:element minOccurs="1" maxOccurs="1" name="RecipientName" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="RecipientTelephone" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="RecipientEmail" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="RecipientAddress" type="tns:AddressType" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="SenderAddressType">
+        <xsd:all>
+          <xsd:element minOccurs="1" maxOccurs="1" name="SenderName" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="SenderTelephone" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="SenderEmail" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="SenderAddress" type="tns:AddressType" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="SenderAddressID" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
       <xsd:complexType name="ShipmentReturnType">
         <xsd:all>
           <xsd:element minOccurs="1" maxOccurs="1" name="ShipmentID" type="xsd:string" />
           <xsd:element minOccurs="1" maxOccurs="1" name="ServiceID" type="xsd:int" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="CreateDate" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="ParcelQuantity" type="xsd:int" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Printed" type="xsd:bool" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="StartTrackingNumber" type="xsd:string" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="EndTrackingNumber" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Despatched" type="xsd:bool" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="DespatchDate" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="OrderReference" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Contents" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="CompanyName" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="RecipientName" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Street" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Locality" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Town" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="County" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Country" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Postcode" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="RecipientEmail" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="EmailNotification" type="xsd:int" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="DashboardNotification" type="xsd:int" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Parcels" type="tns:ArrayOfParcelType" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="ClientReference" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="RecipientAddress" type="tns:RecipientAddressType" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="IsFollowed" type="xsd:boolean" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="IsDespatched" type="xsd:boolean" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="IsPrinted" type="xsd:boolean" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="IsDelivered" type="xsd:boolean" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="IsCancelled" type="xsd:boolean" />
         </xsd:all>
-      </xsd:complexType>
-      <xsd:complexType name="ArrayOfShipmentReturnType">
-        <xsd:complexContent mixed="false">
-          <xsd:restriction base="SOAP-ENC:Array">
-            <xsd:attribute wsdl:arrayType="tns:ShipmentReturnType[]" ref="SOAP-ENC:arrayType" />
-          </xsd:restriction>
-        </xsd:complexContent>
       </xsd:complexType>
       <xsd:complexType name="ShipmentRequestType">
         <xsd:all>
           <xsd:element minOccurs="1" maxOccurs="1" name="ServiceID" type="xsd:int" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="ParcelQuantity" type="xsd:int" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="OrderReference" type="xsd:string" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="Contents" type="xsd:string" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="CompanyName" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="RecipientName" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Street" type="xsd:string" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="Locality" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Town" type="xsd:string" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="County" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Postcode" type="xsd:string" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="RecipientEmail" type="xsd:string" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="EmailNotification" type="xsd:int" />
-          <xsd:element minOccurs="0" maxOccurs="1" name="DashboardNotification" type="xsd:int" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Parcels" type="tns:ArrayOfParcelType" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="ClientReference" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="CollectionDate" type="tns:CollectionDateType" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="SenderAddress" type="tns:SenderAddressType" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="RecipientAddress" type="tns:RecipientAddressType" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="FollowShipment" type="xsd:boolean" />
         </xsd:all>
       </xsd:complexType>
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="GetDomesticServicesRequest">
-    <wsdl:part name="postcode" type="xsd:string" />
+  <wsdl:message name="GetAvailableServicesRequest">
+    <wsdl:part name="Shipment" type="tns:ShipmentRequestType" />
   </wsdl:message>
-  <wsdl:message name="GetDomesticServicesResponse">
+  <wsdl:message name="GetAvailableServicesResponse">
     <wsdl:part name="return" type="tns:ArrayOfServiceType" />
   </wsdl:message>
-  <wsdl:message name="GetDomesticServicesByPostcodeRequest">
-    <wsdl:part name="postcode" type="xsd:string" />
+  <wsdl:message name="GetAvailableCollectionDatesRequest">
+    <wsdl:part name="SenderAddress" type="tns:SenderAddressType" />
+    <wsdl:part name="CourierID" type="xsd:int" />
   </wsdl:message>
-  <wsdl:message name="GetDomesticServicesByPostcodeResponse">
-    <wsdl:part name="return" type="tns:ArrayOfServiceType" />
+  <wsdl:message name="GetAvailableCollectionDatesResponse">
+    <wsdl:part name="return" type="tns:ArrayOfCollectionDateType" />
+  </wsdl:message>
+  <wsdl:message name="AddShipmentRequest">
+    <wsdl:part name="Shipment" type="tns:ShipmentRequestType" />
+  </wsdl:message>
+  <wsdl:message name="AddShipmentResponse">
+    <wsdl:part name="ShipmentID" type="xsd:string" />
   </wsdl:message>
   <wsdl:message name="GetShipmentRequest">
     <wsdl:part name="ShipmentID" type="xsd:string" />
@@ -89,38 +155,43 @@
   <wsdl:message name="GetShipmentResponse">
     <wsdl:part name="return" type="tns:ShipmentReturnType" />
   </wsdl:message>
-  <wsdl:message name="AddDomesticShipmentRequest">
-    <wsdl:part name="Shipment" type="tns:ShipmentRequestType" />
-  </wsdl:message>
-  <wsdl:message name="AddDomesticShipmentResponse">
+  <wsdl:message name="CancelShipmentRequest">
     <wsdl:part name="ShipmentID" type="xsd:string" />
   </wsdl:message>
+  <wsdl:message name="CancelShipmentResponse">
+    <wsdl:part name="Response" type="xsd:boolean" />
+  </wsdl:message>
   <wsdl:portType name="ShippingServicePortType">
-    <wsdl:operation name="GetDomesticServices">
-      <documentation>Returns all available courier services for your account</documentation>
-      <wsdl:input message="tns:GetDomesticServicesRequest" />
-      <wsdl:output message="tns:GetDomesticServicesResponse" />
+    <wsdl:operation name="GetAvailableServices">
+      <documentation>Returns all available courier services for a specific recipient address</documentation>
+      <wsdl:input message="tns:GetAvailableServicesRequest" />
+      <wsdl:output message="tns:GetAvailableServicesResponse" />
     </wsdl:operation>
-    <wsdl:operation name="GetDomesticServicesByPostcode">
-      <documentation>Returns the courier services available at the destination postcode</documentation>
-      <wsdl:input message="tns:GetDomesticServicesByPostcodeRequest" />
-      <wsdl:output message="tns:GetDomesticServicesByPostcodeResponse" />
+    <wsdl:operation name="GetAvailableCollectionDates">
+      <documentation>Returns all available collection dates for a specific sender address and courier</documentation>
+      <wsdl:input message="tns:GetAvailableCollectionDatesRequest" />
+      <wsdl:output message="tns:GetAvailableCollectionDatesResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="AddShipment">
+      <documentation>Queues a new shipment</documentation>
+      <wsdl:input message="tns:AddShipmentRequest" />
+      <wsdl:output message="tns:AddShipmentResponse" />
     </wsdl:operation>
     <wsdl:operation name="GetShipment">
-      <documentation>Returns Shipment Detail</documentation>
+      <documentation>Returns an existing shipment</documentation>
       <wsdl:input message="tns:GetShipmentRequest" />
       <wsdl:output message="tns:GetShipmentResponse" />
     </wsdl:operation>
-    <wsdl:operation name="AddDomesticShipment">
-      <documentation>Queues a new shipment</documentation>
-      <wsdl:input message="tns:AddDomesticShipmentRequest" />
-      <wsdl:output message="tns:AddDomesticShipmentResponse" />
+    <wsdl:operation name="CancelShipment">
+      <documentation>Cancels an existing shipment if it has not already been despatched</documentation>
+      <wsdl:input message="tns:CancelShipmentRequest" />
+      <wsdl:output message="tns:CancelShipmentResponse" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ShippingServiceBinding" type="tns:ShippingServicePortType">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
-    <wsdl:operation name="GetDomesticServices">
-      <soap:operation soapAction="urn:despatchbay#GetDomesticServices" style="rpc" />
+    <wsdl:operation name="GetAvailableServices">
+      <soap:operation soapAction="urn:despatchbay#GetAvailableServices" style="rpc" />
       <wsdl:input>
         <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
       </wsdl:input>
@@ -128,8 +199,17 @@
         <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetDomesticServicesByPostcode">
-      <soap:operation soapAction="urn:despatchbay#GetDomesticServicesByPostcode" style="rpc" />
+    <wsdl:operation name="GetAvailableCollectionDates">
+      <soap:operation soapAction="urn:despatchbay#GetAvailableCollectionDates" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddShipment">
+      <soap:operation soapAction="urn:despatchbay#AddShipment" style="rpc" />
       <wsdl:input>
         <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
       </wsdl:input>
@@ -146,8 +226,8 @@
         <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="AddDomesticShipment">
-      <soap:operation soapAction="urn:despatchbay#AddDomesticShipment" style="rpc" />
+    <wsdl:operation name="CancelShipment">
+      <soap:operation soapAction="urn:despatchbay#CancelShipment" style="rpc" />
       <wsdl:input>
         <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
       </wsdl:input>
@@ -158,7 +238,7 @@
   </wsdl:binding>
   <wsdl:service name="ShippingService">
     <wsdl:port name="ShippingServicePort" binding="tns:ShippingServiceBinding">
-      <soap:address location="http://api.despatchbaypro.com/soap/v11/shipping.php" />
+      <soap:address location="http://api.despatchbaypro.com/soap/v14/shipping.php" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

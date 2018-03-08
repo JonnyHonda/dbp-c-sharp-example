@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Web.Services;
-using System.Web.Services.Protocols;
 using System.Net;
 using System.Xml;
-using Addressing.api.despatchbaypro.com;
+using Addressing.api.despatchbay.com;
 
 namespace Addressing
 {
@@ -52,70 +50,87 @@ namespace Addressing
 			}
 		}
 
-		public static AddressDetailType GetDomesticAddressByLookupMethod (string postcode, string place)
+
+        public static AddressType FindAddressMethod(string postcode, string place)
+        {
+            AddressType addressDetail = null;
+            var Service = GetAuthoriseService();
+            try
+            {
+                // Call the GetDomesticAddressByKey soap service
+                addressDetail = Service.FindAddress(postcode, place);
+            }
+            catch (Exception soapEx)
+            {
+                Console.WriteLine("{0}", soapEx.Message);
+            }
+            return addressDetail;
+        }
+
+		/// <summary>
+        /// Gets the domestic address by key method.
+        /// </summary>
+        /// <returns>The domestic address by key method.</returns>
+        /// <param name="key">Key.</param>
+        public static AddressType GetAddressByKeyMethod (string key)
 		{
-			AddressDetailType addressDetail = null;
+			AddressType addressDetail = null;
 			var Service = GetAuthoriseService ();
 			try {
 				// Call the GetDomesticAddressByKey soap service
-				addressDetail = Service.GetDomesticAddressByLookup (postcode, place);
+				addressDetail = Service.GetAddressByKey (key);
 			} catch (Exception soapEx) {
 				Console.WriteLine ("{0}", soapEx.Message);
 			}
 			return addressDetail;
 		}
 
-		public static AddressDetailType GetDomesticAddressByKeyMethod (string key)
-		{
-			AddressDetailType addressDetail = null;
-			var Service = GetAuthoriseService ();
-			try {
-				// Call the GetDomesticAddressByKey soap service
-				addressDetail = Service.GetDomesticAddressByKey (key);
-			} catch (Exception soapEx) {
-				Console.WriteLine ("{0}", soapEx.Message);
-			}
-			return addressDetail;
-		}
-
-		public static AddressKeyType[] GetDomesticAddressKeysByPostcodeMethod (string postcode)
+		/// <summary>
+        /// Gets the domestic address keys by postcode method.
+        /// </summary>
+        /// <returns>The domestic address keys by postcode method.</returns>
+        /// <param name="postcode">Postcode.</param>
+        public static AddressKeyType[] GetAddressKeysByPostcodeMethod (string postcode)
 		{
 			AddressKeyType[] availableAddresses = null;
 			var Service = GetAuthoriseService ();
 			try {
 				// Call the GetDomesticAddressKeysByPostcode soap service
-				availableAddresses = Service.GetDomesticAddressKeysByPostcode (postcode);
+                availableAddresses = Service.GetAddressKeysByPostcode (postcode);
 			} catch (Exception soapEx) {
 				Console.WriteLine ("{0}", soapEx.Message);
 
 			}
 			return availableAddresses;
-
 		}
 
 		public static void Main (string[] args)
 		{
-			/**
-			 * Demonstrate Getting a list of address keays from a given postcode
-			 * 
-			 **/
-			Console.WriteLine ("\n\n\n============================================");
-			Console.WriteLine ("Calling GetDomesticAddressKeysByPost on LN1 2EU");
 
-			LoadConfiguration ();
-			AddressKeyType[] availableAddresses = null;
-
-			try {
-				availableAddresses = GetDomesticAddressKeysByPostcodeMethod ("LN12EU");
-				int count = 0;
-				Console.WriteLine ("The following keys found");
-				foreach (AddressKeyType element in availableAddresses) {
-					count += 1;
-					Console.WriteLine ("Key #{0}: Address {1}", count, element.Key, element.Address);
-				}
-			} catch (Exception ex) {
-				Console.WriteLine (ex.Message);
-			}
+            LoadConfiguration();
+            /**
+             * Demonstrate getting an address by Postcode and place name/number
+             * 
+             **/
+            Console.WriteLine("\n\n\n============================================");
+            Console.WriteLine("Calling GetDomesticAddressByLookup by LN12EU and 7");
+            AddressType addressDetail2 = null;
+            try
+            {
+                addressDetail2 = FindAddressMethod("LN12EU", "7");
+                Console.WriteLine("Address details as follows");
+                Console.WriteLine(addressDetail2.CompanyName);
+                Console.WriteLine(addressDetail2.Street);
+                Console.WriteLine(addressDetail2.Locality);
+                Console.WriteLine(addressDetail2.TownCity);
+                Console.WriteLine(addressDetail2.County);
+                Console.WriteLine(addressDetail2.CountryCode);
+                Console.WriteLine(addressDetail2.PostalCode);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
 			/**
 			 * Demonstrate getting a single address by its key
@@ -123,18 +138,18 @@ namespace Addressing
 			 **/
 			Console.WriteLine ("\n\n\n============================================");
 			Console.WriteLine ("Calling GetDomesticAddressKeysByPost on key 1007");
-			AddressDetailType addressDetail = null;
+            AddressType addressDetail = null;
 			try {
-				addressDetail = GetDomesticAddressByKeyMethod ("LN12EU1007");
+                addressDetail = GetAddressByKeyMethod ("LN12EU1007");
 				Console.WriteLine ("Address details as follows");
 				Console.WriteLine (addressDetail.CompanyName);
 				Console.WriteLine (addressDetail.Street);
 				Console.WriteLine (addressDetail.Locality);
-				Console.WriteLine (addressDetail.Town);
+				Console.WriteLine (addressDetail.TownCity);
 				Console.WriteLine (addressDetail.County);
-				Console.WriteLine (addressDetail.Country);
-				Console.WriteLine (addressDetail.Postcode);
-				Console.WriteLine (addressDetail.Key);
+				Console.WriteLine (addressDetail.CountryCode);
+				Console.WriteLine (addressDetail.PostalCode);
+				
 			} catch (Exception ex) {
 				Console.WriteLine (ex.Message);
 			}
@@ -144,19 +159,16 @@ namespace Addressing
 			 * 
 			 **/
 			Console.WriteLine ("\n\n\n============================================");
-			Console.WriteLine ("Calling GetDomesticAddressByLookup by LN12EU and 7");
-			AddressDetailType addressDetail2 = null;
+			Console.WriteLine ("Calling GetDomesticAddressByLookup by LN12EU");
+            AddressKeyType[] addressKeyArray = null;
 			try {
-				addressDetail2 = GetDomesticAddressByLookupMethod ("LN12EU", "7");
-				Console.WriteLine ("Address details as follows");
-				Console.WriteLine (addressDetail2.CompanyName);
-				Console.WriteLine (addressDetail2.Street);
-				Console.WriteLine (addressDetail2.Locality);
-				Console.WriteLine (addressDetail2.Town);
-				Console.WriteLine (addressDetail2.County);
-				Console.WriteLine (addressDetail2.Country);
-				Console.WriteLine (addressDetail2.Postcode);
-				Console.WriteLine (addressDetail2.Key);
+                addressKeyArray = GetAddressKeysByPostcodeMethod ("LN12EU");
+                foreach(AddressKeyType key in addressKeyArray){
+                   Console.WriteLine ("Address details as follows");
+                    Console.WriteLine (key.Key);
+                    Console.WriteLine (key.Address);
+                }
+				
 			} catch (Exception ex) {
 				Console.WriteLine (ex.Message);
 			}
