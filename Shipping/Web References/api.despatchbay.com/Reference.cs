@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Shipping.api.despatchbaypro.com {
+namespace Shipping.api.despatchbay.com {
     using System.Diagnostics;
     using System;
     using System.Xml.Serialization;
@@ -38,7 +38,7 @@ namespace Shipping.api.despatchbaypro.com {
         
         /// CodeRemarks
         public ShippingService() {
-            this.Url = "http://api.despatchbaypro.com/soap/v14/shipping.php";
+            this.Url = "http://api.despatchbay.com/soap/v14/shipping.php";
         }
         
         public ShippingService(string url) {

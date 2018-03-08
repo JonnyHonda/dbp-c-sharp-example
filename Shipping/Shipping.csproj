@@ -37,7 +37,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shipping.cs" />
-    <Compile Include="Web References\api.despatchbaypro.com\Reference.cs">
+    <Compile Include="Web References\api.despatchbay.com\Reference.cs">
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -49,8 +49,8 @@
     <None Include="configuration.xml-template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Web References\api.despatchbaypro.com\shipping.wsdl" />
-    <None Include="Web References\api.despatchbaypro.com\Reference.map">
+    <None Include="Web References\api.despatchbay.com\shipping.wsdl" />
+    <None Include="Web References\api.despatchbay.com\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
@@ -59,10 +59,10 @@
     <WebReferences Include="Web References" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://api.despatchbaypro.com/soap/v14/shipping.php?wsdl">
+    <WebReferenceUrl Include="http://api.despatchbay.com/soap/v14/shipping.php?wsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\api.despatchbaypro.com</RelPath>
-      <UpdateFromURL>http://api.despatchbaypro.com/soap/v14/shipping.php?wsdl</UpdateFromURL>
+      <RelPath>Web References\api.despatchbay.com</RelPath>
+      <UpdateFromURL>http://api.despatchbay.com/soap/v14/shipping.php?wsdl</UpdateFromURL>
     </WebReferenceUrl>
   </ItemGroup>
 </Project>

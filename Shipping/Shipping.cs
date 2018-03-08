@@ -3,7 +3,7 @@ using System.Web.Services;
 using System.Web.Services.Protocols;
 using System.Net;
 using System.Xml;
-using Shipping.api.despatchbaypro.com;
+using Shipping.api.despatchbay.com;
 
 namespace wsdlConsole
 {
@@ -55,13 +55,13 @@ namespace wsdlConsole
 		}
 
 
-		static ServiceType[] GetDomesticServicesMethod (string postcode)
+        static ServiceType[] GetAvailableServicesMethod (ShipmentRequestType shipment)
 		{
 			ServiceType[] availableServices = null;
 			var Service = GetAuthoriseService ();
 			try {
 				// Call the GetDomesticServices soap service
-				availableServices = Service.GetDomesticServices (postcode);
+				availableServices = Service.GetAvailableServices (shipment);
 
 			} catch (Exception soapEx) {
 				Console.WriteLine ("{0}", soapEx.Message);
@@ -70,67 +70,7 @@ namespace wsdlConsole
 			return availableServices;
 		}
 
-		/**
-		 * An example of call the DBP api method GetDomesticServicesByPostcode 
-		 *
-		**/
-		static ServiceType[] GetDomesticServicesByPostcodeMethod (string postcode)
-		{	
-			ServiceType[] availableServices = null;
-			var Service = GetAuthoriseService ();
 
-			try {
-				// Call the GetDomesticServicesByPostcode soap service
-				availableServices = Service.GetDomesticServicesByPostcode (postcode);
-			} catch (Exception soapEx) {
-				Console.WriteLine ("{0}", soapEx.Message);
-			}
-			return availableServices;
-		}
-
-		/**
-		 * An example of call the DBP api method AddDomesticShipmentMethod 
-		 *
-		**/
-		static string AddDomesticShipmentMethod ()
-		{
-			var Service = GetAuthoriseService ();
-			string shipmentId = null; 
-			try {
-				ShipmentRequestType ShipmentRequest = new ShipmentRequestType ();
-				ShipmentRequest.CompanyName = "Acme Toy Company";
-				ShipmentRequest.Contents = "Toy Soldiers";
-				ShipmentRequest.County = "Lincolnshire";
-				ShipmentRequest.ParcelQuantity = 3;
-				ShipmentRequest.Postcode = "LN12EU";
-				ShipmentRequest.OrderReference = "c# - Example";
-				ShipmentRequest.RecipientEmail = "john.burrin@thesalegroup.co.uk";
-				ShipmentRequest.RecipientName = "Jonny Honda";
-				ShipmentRequest.ServiceID = 47; // 47 - Small packet
-				ShipmentRequest.Street = "6 Elmdene Close, The Elms";
-				ShipmentRequest.Town = "Lincoln";
-				shipmentId = Service.AddDomesticShipment (ShipmentRequest);
-				Console.WriteLine ("Success");
-			} catch (Exception soapEx) {
-				Console.WriteLine ("{0}", soapEx.Message);
-			}
-			return shipmentId;
-		}
-
-
-		public static ShipmentReturnType GetShipmentMethod (string shipmentID)
-		{
-			var Service = GetAuthoriseService ();
-			ShipmentReturnType shipmentDetail = new ShipmentReturnType(); 
-
-			try {
-				shipmentDetail = Service.GetShipment (shipmentID);
-
-			} catch (Exception soapEx) {
-				Console.WriteLine ("{0}, {1}", soapEx.Message, soapEx.InnerException);
-			}
-			return shipmentDetail;
-		}
 
 		public static void Main (string[] args)
 		{
@@ -144,9 +84,57 @@ namespace wsdlConsole
 			 **/
 
 			Console.WriteLine ("\n\n\n============================================");
-			Console.WriteLine ("Calling GetDomesticServices");
 			try {
-				availableServices = GetDomesticServicesMethod ("LN12UE");
+                // First we need to build a shipment request object
+                ShipmentRequestType Shipment = new ShipmentRequestType();
+                //shipment.ServiceID = null;
+                //shipment.ClientReference = null;
+                //shipment.FollowShipment = null;
+                ParcelType Parcel = new ParcelType();
+                Parcel.Contents = "Logo";
+                Parcel.Height = 10;
+                Parcel.Length = 10;
+                Parcel.Width = 10;
+                Parcel.Weight = 100;
+                Parcel.Value = 100;
+
+                ParcelType[] Parcels = new ParcelType[1];
+                Parcels[0] = Parcel;
+
+                // Sender Address
+                AddressType Address = new AddressType();
+                Address.Street = "4077 Korea Street";
+                Address.TownCity = "Lincoln";
+                Address.PostalCode = "LN6 3QR";
+                Address.CountryCode = "GB";
+
+                // Receipient Address
+                RecipientAddressType RecipientAddress = new RecipientAddressType();
+                RecipientAddress.RecipientName = "Cprl Klingor";
+                RecipientAddress.RecipientEmail = "klingor@gmail.com";
+                RecipientAddress.RecipientTelephone = "01522 76767676";
+                RecipientAddress.RecipientAddress = Address;
+
+                // Sender Address
+               // Address = null;
+                Address.Street = "Shropshire Street";
+                Address.TownCity = "Lincoln";
+                Address.PostalCode = "LN1 2UE";
+                Address.CountryCode = "GB";
+
+                SenderAddressType SenderAddress = new SenderAddressType();
+                SenderAddress.SenderName = "Hawkeye Pearce";
+                SenderAddress.SenderAddress = Address;
+                SenderAddress.SenderEmail = "john.burrin@thesalegroup.co.uk";
+                SenderAddress.SenderTelephone = "01522 000000";
+
+                Shipment.Parcels = Parcels;
+                Shipment.RecipientAddress = RecipientAddress;
+                Shipment.SenderAddress = SenderAddress;
+
+
+                availableServices = GetAvailableServicesMethod (Shipment);
+
 				// iterate though the list of returned services
 				count = 0;
 				foreach (ServiceType element in availableServices) {
@@ -157,86 +145,6 @@ namespace wsdlConsole
 				Console.WriteLine (ex.Message);
 			}
 
-
-			/**
-			 * Demonstrate getting a list of enabled services available for a given postcode
-			 * 
-			 **/
-
-			Console.WriteLine ("\n\n\n============================================");
-			Console.WriteLine ("Calling GetDomesticServicesByPostcode");
-			availableServices = null;
-			availableServices = GetDomesticServicesByPostcodeMethod ("LN67FL");
-			// iterate though the list of returned services
-			count = 0;
-			foreach (ServiceType element in availableServices) {
-				count += 1;
-				System.Console.WriteLine ("Element Id: {0} - {1} £{2}", element.ServiceID, element.Name, element.Cost);
-			}
-
-			/**
-			 * Demonstrate adding a shipment
-			 * 
-			 **/
-
-			Console.WriteLine ("\n\n\n============================================");
-			Console.WriteLine ("Calling AddDomesticShipment");
-			string shipmentId = null; 
-			shipmentId = AddDomesticShipmentMethod ();
-			Console.WriteLine ("Shipment with id of {0} added", shipmentId);
-
-			/**
-			 * Demonstrate getting a shipment
-			 * 
-			 **/
-			Console.WriteLine ("\n\n\n============================================");
-			Console.WriteLine ("Calling GetShipment");
-			ShipmentReturnType shipmentDetail = null; 
-
-			Console.WriteLine ("Fetching added Shipment with id of {0}",shipmentId);
-
-			shipmentDetail = GetShipmentMethod (shipmentId);
-			Console.WriteLine ("Shipment details as follows");
-			Console.WriteLine ("RecipientName {0}", shipmentDetail.RecipientName);
-			Console.WriteLine ("RecipientEmail {0}", shipmentDetail.RecipientEmail);
-			Console.WriteLine ("CompanyName {0}", shipmentDetail.CompanyName);
-			Console.WriteLine ("Street {0}", shipmentDetail.Street);
-			Console.WriteLine ("Town {0}", shipmentDetail.Town);
-			Console.WriteLine ("Locality {0}", shipmentDetail.Locality);
-			Console.WriteLine ("County {0}", shipmentDetail.County);
-			Console.WriteLine ("Postcode {0}", shipmentDetail.Postcode);
-			Console.WriteLine ("Contents {0}", shipmentDetail.Contents);
-			Console.WriteLine ("CreateDate {0}", shipmentDetail.CreateDate);
-
-			Console.WriteLine ("ParcelQuantity {0}", shipmentDetail.ParcelQuantity);
-			Console.WriteLine ("OrderReference {0}", shipmentDetail.OrderReference);
-			Console.WriteLine ("DashboardNotification {0}", shipmentDetail.DashboardNotification);
-			Console.WriteLine ("Despatched {0}", shipmentDetail.Despatched);
-			Console.WriteLine ("EmailNotification {0}", shipmentDetail.EmailNotification);
-			Console.WriteLine ("EndTrackingNumber {0}", shipmentDetail.EndTrackingNumber);
-
-
-			/// There is some funkyness going on with the way the wsdl file treat these to fields
-			/// // in order to get this to work I have had to override the declarations of the fields in 
-			/// the We References/ReferenceMap/Reference.rs file
-			/// 
-			/// [System.Xml.Serialization.SoapIgnoreAttribute()]
-			/// public string Despatched
-			/// 
-			/// And
-			/// 
-			/// [System.Xml.Serialization.SoapIgnoreAttribute()]
-			/// public string Printed;
-			/// 
-			/// Refreshing the Shipping web service will break this example
-
-			Console.WriteLine ("Printed {0}", shipmentDetail.Printed);
-			Console.WriteLine ("DespatchDate {0}", shipmentDetail.DespatchDate);	
-
-
-			Console.WriteLine ("ServiceID {0}", shipmentDetail.ServiceID);
-			Console.WriteLine ("ShipmentID {0}", shipmentDetail.ShipmentID);
-			Console.WriteLine ("StartTrackingNumber {0}", shipmentDetail.StartTrackingNumber);
 
 
 		}

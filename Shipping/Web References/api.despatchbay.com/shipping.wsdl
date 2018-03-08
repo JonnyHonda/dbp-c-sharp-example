@@ -238,7 +238,7 @@
   </wsdl:binding>
   <wsdl:service name="ShippingService">
     <wsdl:port name="ShippingServicePort" binding="tns:ShippingServiceBinding">
-      <soap:address location="http://api.despatchbaypro.com/soap/v14/shipping.php" />
+      <soap:address location="http://api.despatchbay.com/soap/v14/shipping.php" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
