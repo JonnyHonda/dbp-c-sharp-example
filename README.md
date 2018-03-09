@@ -2,9 +2,7 @@
 
 Simple C# implementation of the Despatch Bay Pro API, I'm not a C# programmer so this implementation is not be production safe, be warned.
 
-I did have some issues with SOAP datatypes, in getShipment().  Where the php soap datatypes being returned for a couple of boolean fields could not be cast.
-
-I would recommend checking this out and seeing if it will compile without updating the Web References, the wsdl files are included in this repo.
+I would recommend checking this out and seeing if it will compile without updating the Web References, 
 
 These examples were built using
 
@@ -36,7 +34,7 @@ For example this is a sample shipping configuration.xml
 <configuration>
 	<apiuser>MyApiUser</apiuser>
 	<apikey>MyApiKey</apikey>
-	<apiendpoint>http://api.despatchbaypro.com/soap/v11/shipping.php</apiendpoint>
+	<apiendpoint>http://api.despatchbay.com/soap/v14/shipping.php</apiendpoint>
 </configuration>
 
 ```
@@ -48,7 +46,7 @@ Tracking
 ```
 #!xml#
 
-<apiendpoint>http://api.despatchbaypro.com/soap/v11/tracking.php</apiendpoint>
+<apiendpoint>http://api.despatchbay.com/soap/v14/tracking.php</apiendpoint>
 ```
 
 
@@ -57,9 +55,15 @@ Addressing
 ```
 #!xml#
 
-<apiendpoint>http://api.despatchbaypro.com/soap/v11/addressing.php</apiendpoint>
+<apiendpoint>http://api.despatchbay.com/soap/v14/addressing.php</apiendpoint>
 ```
 
 
 
 It's VERY basic, there is little to no error handling, the tracking example may not work as is, as the tracking code is probably out of date and you will need a valid from the courier i.e Parcelforce
+
+Despatch Bays's API documentation can be found here https://github.com/despatchbay/api.v14/wiki
+
+Despatch Bay now have API rate limiting so during development expect the odd issue as you will probably breach them you can ask them to up the limit and they'll do it for you.
+
+Despatch Bay has a demo mode so you can build all the functionality you like without it costing a penny, bare in mind safe guards have been put in place in Demo mode to prevent abuse. Addressing API will return random addresses and only two Demo couriers are available, but it's enough to get you going.
