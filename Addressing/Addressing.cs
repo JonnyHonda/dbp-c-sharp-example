@@ -11,28 +11,28 @@ namespace Addressing
 		private static string apiuser;
 		private static string apikey;
 
-		/**
-		 * Connects to the api endpoint, authorises and returns a ShippingService Object
-		 *  
-		**/
+        /// <summary>
+        /// Gets the authorise service. Loads a XML configuration file, creates a 
+        /// Basic Auth credentioals object and applies to the Service we want to use
+        /// </summary>
+        /// <returns>The authorise service.</returns>
 		static AddressingService GetAuthoriseService ()
 		{
 			// Set up some credentials
 			NetworkCredential netCredential = new NetworkCredential (apiuser, apikey);
-			// Create the service of type Shipping service
+			// Create the service of type Addressing service
 			AddressingService Service = new AddressingService (apiendpoint);
-			Uri uri = new Uri (Service.Url);
+            Service.RequestEncoding = System.Text.Encoding.UTF8;
+            Uri uri = new Uri(Service.Url);
 			ICredentials credentials = netCredential.GetCredential (uri, "Basic");
 			// Apply the credentials to the service
 			Service.Credentials = credentials;
 			return Service;
 		}
 
-		/**
-		 * Loads configuration values from the configuration.xml
-		 * 
-		 * 
-		**/
+        /// <summary>
+        /// Loads the configuration file and sets some static variables
+        /// </summary>
 		static void LoadConfiguration ()
 		{
 			XmlDocument doc = new XmlDocument ();
@@ -51,9 +51,15 @@ namespace Addressing
 		}
 
 
+        /// <summary>
+        /// Finds the address method.
+        /// </summary>
+        /// <returns>The address method.</returns>
+        /// <param name="postcode">Postcode.</param>
+        /// <param name="place">Place.</param>
         public static AddressType FindAddressMethod(string postcode, string place)
         {
-            AddressType addressDetail = null;
+            AddressType addressDetail = new AddressType();
             var Service = GetAuthoriseService();
             try
             {
@@ -74,7 +80,7 @@ namespace Addressing
         /// <param name="key">Key.</param>
         public static AddressType GetAddressByKeyMethod (string key)
 		{
-			AddressType addressDetail = null;
+            AddressType addressDetail = new AddressType();
 			var Service = GetAuthoriseService ();
 			try {
 				// Call the GetDomesticAddressByKey soap service
@@ -108,13 +114,13 @@ namespace Addressing
 		{
 
             LoadConfiguration();
-            /**
+            /*
              * Demonstrate getting an address by Postcode and place name/number
              * 
              **/
             Console.WriteLine("\n\n\n============================================");
-            Console.WriteLine("Calling GetDomesticAddressByLookup by LN12EU and 7");
-            AddressType addressDetail2 = null;
+            Console.WriteLine("Calling FindAddressMethod by LN12EU and 7");
+            AddressType addressDetail2 = new AddressType();
             try
             {
                 addressDetail2 = FindAddressMethod("LN12EU", "7");
@@ -132,13 +138,13 @@ namespace Addressing
                 Console.WriteLine(ex.Message);
             }
 
-			/**
+			/*
 			 * Demonstrate getting a single address by its key
 			 * 
 			 **/
 			Console.WriteLine ("\n\n\n============================================");
-			Console.WriteLine ("Calling GetDomesticAddressKeysByPost on key 1007");
-            AddressType addressDetail = null;
+            Console.WriteLine ("Calling GetAddressByKeyMethod on key 1007");
+            AddressType addressDetail = new AddressType();
 			try {
                 addressDetail = GetAddressByKeyMethod ("LN12EU1007");
 				Console.WriteLine ("Address details as follows");
@@ -154,12 +160,12 @@ namespace Addressing
 				Console.WriteLine (ex.Message);
 			}
 
-			/**
-			 * Demonstrate getting an address by Postcode and place name/number
+			/*
+			 * Demonstrate getting a list of address keys by Postcode
 			 * 
 			 **/
 			Console.WriteLine ("\n\n\n============================================");
-			Console.WriteLine ("Calling GetDomesticAddressByLookup by LN12EU");
+            Console.WriteLine ("Calling GetAddressKeysByPostcodeMethod by LN12EU");
             AddressKeyType[] addressKeyArray = null;
 			try {
                 addressKeyArray = GetAddressKeysByPostcodeMethod ("LN12EU");

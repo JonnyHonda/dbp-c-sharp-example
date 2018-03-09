@@ -3,7 +3,6 @@ using System.Net;
 using System.Xml;
 using Tracking.api.despatchbay.com;
 
-
 namespace Tracking
 {
 	class MainClass
@@ -11,30 +10,29 @@ namespace Tracking
 		private static string apiendpoint;
 		private static string apiuser;
 		private static string apikey;
-		//	private static string ShipmentID;
 
-		/**
-		 * Connects to the api endpoint, authorises and returns a ShippingService Object
-		 *  
-		**/
+        /// <summary>
+        /// Gets the authorise service. Loads a XML configuration file, creates a 
+        /// Basic Auth credentioals object and applies to the Service we want to use
+        /// </summary>
+        /// <returns>The authorise service.</returns>
 		static TrackingService GetAuthoriseService ()
 		{
 			// Set up some credentials
 			NetworkCredential netCredential = new NetworkCredential (apiuser, apikey);
-			// Create the service of type Shipping service
+			// Create the service of type Tracking service
 			TrackingService Service = new TrackingService (apiendpoint);
-			Uri uri = new Uri (Service.Url);
-			ICredentials credentials = netCredential.GetCredential (uri, "Basic");
+            Service.RequestEncoding = System.Text.Encoding.UTF8;
+            Uri uri = new Uri(Service.Url);
+            ICredentials credentials = netCredential.GetCredential (uri, "Basic");
 			// Apply the credentials to the service
 			Service.Credentials = credentials;
 			return Service;
 		}
 
-		/**
-		 * Loads configuration values from the configuration.xml
-		 * 
-		 * 
-		**/
+        /// <summary>
+        /// Loads the configuration file and sets some static variables
+        /// </summary>
 		static void LoadConfiguration ()
 		{
 			XmlDocument doc = new XmlDocument ();
@@ -52,9 +50,14 @@ namespace Tracking
 			}
 		}
 
-		public static TrackingReturnType GetTrackingMethod (string trackingcode)
+		/// <summary>
+        /// Gets the tracking method.
+        /// </summary>
+        /// <returns>TrackingReturnType</returns>
+        /// <param name="trackingcode">Trackingcode.</param>
+        public static TrackingReturnType GetTrackingMethod (string trackingcode)
 		{
-            TrackingReturnType trackingDetail = null;
+            TrackingReturnType trackingDetail = new TrackingReturnType();
 			var Service = GetAuthoriseService ();
 			try {
 				// Call the GetDomesticAddressByKey soap service
@@ -68,9 +71,10 @@ namespace Tracking
 		public static void Main (string[] args)
 		{
 			LoadConfiguration ();
-			/**
+			/*
 			 * Demonstrate Getting tracking information
-			 * 
+			 * To run correctly you'll need a valid tracking number in despatch bay
+			 * And it has to a parcel in your account
 			 **/
 			// Test if input arguments were supplied:
 			if (args.Length == 0)
@@ -82,7 +86,7 @@ namespace Tracking
 			string trackingNumber = args[0];
 			Console.WriteLine ("\n\n\n============================================");
 			Console.WriteLine ("Calling GetTracking");
-            TrackingReturnType trackingDetail = null;
+            TrackingReturnType trackingDetail = new TrackingReturnType();
 			trackingDetail = GetTrackingMethod (trackingNumber);
             Console.WriteLine("Tracking Detail for Courier {0}",trackingDetail.CourierName);
             Console.WriteLine("Service {0}", trackingDetail.ServiceName);

@@ -11,10 +11,11 @@ namespace wsdlConsole
 		private static string apiuser;
 		private static string apikey;
 
-		/**
-		 * Connects to the api endpoint, authorises and returns a ShippingService Object
-		 *  
-		**/
+		/// <summary>
+        /// Gets the authorise service. Loads a XML configuration file, creates a 
+        /// Basic Auth credentioals object and applies to the Service we want to use
+        /// </summary>
+        /// <returns>The authorise service.</returns>
 		static ShippingService GetAuthoriseService ()
 		{
 			// Set up some credentials
@@ -29,11 +30,9 @@ namespace wsdlConsole
 			return Service;
 		}
 
-		/**
-		 * Loads configuration values from the configuration.xml
-		 * 
-		 * 
-		**/
+		/// <summary>
+        /// Loads the configuration file and sets some static variables
+        /// </summary>
 		static void LoadConfiguration ()
 		{
 			XmlDocument doc = new XmlDocument ();
@@ -53,6 +52,12 @@ namespace wsdlConsole
 		}
 
 
+        /// <summary>
+        /// Gets the available services method.
+        /// See the API v14 documention for more information - https://github.com/despatchbay/api.v14/wiki/Shipping-Service
+        /// </summary>
+        /// <returns>an array of ServiceType[] </returns>
+        /// <param name="shipment">Shipment.</param>
         static ServiceType[] GetAvailableServicesMethod (ShipmentRequestType shipment)
 		{
 			ServiceType[] availableServices = null;
@@ -76,7 +81,7 @@ namespace wsdlConsole
 
 			int count = 0;
 			ServiceType[] availableServices = null;
-			/**
+			/*
 			 * Demonstrate getting a list of all services available for a given postcode
 			 * 
 			 **/
@@ -88,13 +93,14 @@ namespace wsdlConsole
                 //shipment.ServiceID = null;
                 //shipment.ClientReference = null;
                 //shipment.FollowShipment = null;
+
                 ParcelType Parcel = new ParcelType();
                 Parcel.Contents = "Logo";
-                Parcel.Height = 10;
-                Parcel.Length = 10;
-                Parcel.Width = 10;
-                Parcel.Weight = 100;
-                Parcel.Value = 100;
+                Parcel.Height = 10; // This is cm
+                Parcel.Length = 10; // This is cm
+                Parcel.Width = 10;  // This is cm
+                Parcel.Weight = 10; // This is kg
+                Parcel.Value = 100; // This is GBP
 
                 // Obviously we could add more parcels here
                 ParcelType[] Parcels = new ParcelType[1];
