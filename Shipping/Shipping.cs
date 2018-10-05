@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Shipping.com.despatchbay.api;
+using System;
 using System.Net;
 using System.Xml;
-using Shipping.api.despatchbay.com;
+
 
 namespace wsdlConsole
 {
@@ -20,8 +21,9 @@ namespace wsdlConsole
 		{
 			// Set up some credentials
 			NetworkCredential netCredential = new NetworkCredential (apiuser, apikey);
+
 			// Create the service of type Shipping service
-			ShippingService Service = new ShippingService (apiendpoint);
+			ShippingService Service = new ShippingService ();
 			Service.RequestEncoding = System.Text.Encoding.UTF8;
 			Uri uri = new Uri (Service.Url);
 			ICredentials credentials = netCredential.GetCredential (uri, "Basic");
@@ -73,20 +75,65 @@ namespace wsdlConsole
 			return availableServices;
 		}
 
+        /// <summary>
+        /// Add a Shipment Method
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        static String AddShipmentMethod(ShipmentRequestType shipment)
+        {
+            String ShipmentID = null;
+            var Service = GetAuthoriseService();
+            try
+            {
+                // Call the GetDomesticServices soap service
+                Console.WriteLine(shipment.ServiceID);
+                ShipmentID = Service.AddShipment(shipment);
+                
+            }
+            catch (Exception soapEx)
+            {
+                Console.WriteLine("{0}", soapEx.Message);
+
+            }
+            return ShipmentID;
+        }
+
+        /// <summary>
+        /// Book Shipment Method
+        /// </summary>
+        /// <param name="shipments"></param>
+        /// <returns></returns>
+        static ShipmentReturnType[] BookShipmentsMethod(String[] shipments)
+        {
+            ShipmentReturnType[] BookingResult = null;
+            var Service = GetAuthoriseService();
+            try
+            {
+                // Call the GetDomesticServices soap service
+                BookingResult = Service.BookShipments(shipments);
+
+            }
+            catch (Exception soapEx)
+            {
+                Console.WriteLine("{0}", soapEx.Message);
+
+            }
+            return BookingResult;
+        }
 
 
-		public static void Main (string[] args)
+        /// <summary>
+        /// Example to Get available services, Add a shipment to the account and the book the collection
+        /// </summary>
+        /// <param name="args"></param>
+        public static void Main (string[] args)
 		{
 			LoadConfiguration ();
 
 			int count = 0;
 			ServiceType[] availableServices = null;
-			/*
-			 * Demonstrate getting a list of all services available for a given postcode
-			 * 
-			 **/
 
-			Console.WriteLine ("\n\n\n============================================");
 			try {
                 // First we need to build a shipment request object
                 ShipmentRequestType Shipment = new ShipmentRequestType();
@@ -95,12 +142,13 @@ namespace wsdlConsole
                 //shipment.FollowShipment = null;
 
                 ParcelType Parcel = new ParcelType();
-                Parcel.Contents = "Logo";
                 Parcel.Height = 10; // This is cm
                 Parcel.Length = 10; // This is cm
                 Parcel.Width = 10;  // This is cm
                 Parcel.Weight = 10; // This is kg
                 Parcel.Value = 100; // This is GBP
+                Parcel.Contents = "New Dress for Klingor";
+
 
                 // Obviously we could add more parcels here
                 ParcelType[] Parcels = new ParcelType[1];
@@ -124,8 +172,7 @@ namespace wsdlConsole
 
                 RecipientAddress.RecipientAddress = Address;
 
-                // Sender Details
-                SenderAddressType SenderAddress = new SenderAddressType();
+    			SenderAddressType SenderAddress = new SenderAddressType();
                 SenderAddress.SenderName = "Hawkeye Pearce";
                 SenderAddress.SenderEmail = "john.burrin@thesalegroup.co.uk";
                 SenderAddress.SenderTelephone = "01522 000000";
@@ -142,7 +189,7 @@ namespace wsdlConsole
                 Shipment.Parcels = Parcels;
                 Shipment.RecipientAddress = RecipientAddress;
                 Shipment.SenderAddress = SenderAddress;
-
+               
                 // Call the service
                 availableServices = GetAvailableServicesMethod (Shipment);
 
@@ -150,14 +197,49 @@ namespace wsdlConsole
 				count = 0;
 				foreach (ServiceType element in availableServices) {
 					count += 1;
+                    if (count == 1)
+                    {
+                        // Manually apply the First service
+                        Shipment.ServiceID = element.ServiceID;
+
+                        // Not sure why, but errors with ServiceID = 0
+                        // if ServiceIDSpecified is Not set to true;
+                        Shipment.ServiceIDSpecified = true;
+                    }
 					System.Console.WriteLine ("Service id:{0} - {1} £{2}", element.ServiceID, element.Name, element.Cost);
 				}
-			} catch (Exception ex) {
+                
+
+                Shipment.ClientReference = "Dummy Client Ref";
+                // We need a collection Date
+                CollectionDateType CollectionDate = new CollectionDateType();
+
+                // Set the Collection date for tomorrow 
+                CollectionDate.CollectionDate = DateTime.Today.AddDays(1).ToString("yyyy-MM-dd");
+ 
+                Shipment.CollectionDate = CollectionDate;
+
+                // Add Shipment
+                String ShipmentID = AddShipmentMethod(Shipment);
+                Console.WriteLine(ShipmentID);
+
+                // Book collection
+                // This is deliberatly written to handle one booking request
+                String [] Bookings = new String[1];
+                Bookings[0] = ShipmentID;
+
+                ShipmentReturnType[] BookingResults = null;
+                BookingResults = BookShipmentsMethod(Bookings);
+                // iterate though the list of returned services
+                count = 0;
+                foreach (ShipmentReturnType element in BookingResults)
+                {
+                    count += 1;
+                    System.Console.WriteLine("Service id:{0} - ShipmentID {1} - Label Url{2}", element.ServiceID,element.ShipmentID, element.LabelsURL);
+                }
+            } catch (Exception ex) {
 				Console.WriteLine (ex.Message);
 			}
-
-
-
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="urn:despatchbay" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:despatchbay" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:despatchbay" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:despatchbay" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="urn:despatchbay">
       <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -11,7 +11,7 @@
           <xsd:element minOccurs="0" maxOccurs="1" name="Locality" type="xsd:string" />
           <xsd:element minOccurs="1" maxOccurs="1" name="TownCity" type="xsd:string" />
           <xsd:element minOccurs="0" maxOccurs="1" name="County" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="PostalCode" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="PostalCode" type="xsd:string" />
           <xsd:element minOccurs="1" maxOccurs="1" name="CountryCode" type="xsd:string" />
         </xsd:all>
       </xsd:complexType>
@@ -59,8 +59,8 @@
           <xsd:element minOccurs="1" maxOccurs="1" name="Length" type="xsd:float" />
           <xsd:element minOccurs="1" maxOccurs="1" name="Width" type="xsd:float" />
           <xsd:element minOccurs="1" maxOccurs="1" name="Height" type="xsd:float" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Contents" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Value" type="xsd:float" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="Contents" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="Value" type="xsd:float" />
           <xsd:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="xsd:string" />
         </xsd:all>
       </xsd:complexType>
@@ -74,8 +74,9 @@
       <xsd:complexType name="ServiceType">
         <xsd:all>
           <xsd:element minOccurs="1" maxOccurs="1" name="ServiceID" type="xsd:int" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Format" type="xsd:string" />
           <xsd:element minOccurs="1" maxOccurs="1" name="Name" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="Cost" type="xsd:float" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="Cost" type="xsd:float" />
           <xsd:element minOccurs="1" maxOccurs="1" name="Courier" type="tns:CourierType" />
         </xsd:all>
       </xsd:complexType>
@@ -99,13 +100,16 @@
           <xsd:element minOccurs="1" maxOccurs="1" name="SenderName" type="xsd:string" />
           <xsd:element minOccurs="1" maxOccurs="1" name="SenderTelephone" type="xsd:string" />
           <xsd:element minOccurs="1" maxOccurs="1" name="SenderEmail" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="SenderAddress" type="tns:AddressType" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="SenderAddress" type="tns:AddressType" />
           <xsd:element minOccurs="0" maxOccurs="1" name="SenderAddressID" type="xsd:int" />
         </xsd:all>
       </xsd:complexType>
       <xsd:complexType name="ShipmentReturnType">
         <xsd:all>
           <xsd:element minOccurs="1" maxOccurs="1" name="ShipmentID" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="ShipmentDocumentID" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="CollectionID" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="CollectionDocumentID" type="xsd:string" />
           <xsd:element minOccurs="1" maxOccurs="1" name="ServiceID" type="xsd:int" />
           <xsd:element minOccurs="1" maxOccurs="1" name="Parcels" type="tns:ArrayOfParcelType" />
           <xsd:element minOccurs="0" maxOccurs="1" name="ClientReference" type="xsd:string" />
@@ -115,18 +119,52 @@
           <xsd:element minOccurs="1" maxOccurs="1" name="IsPrinted" type="xsd:boolean" />
           <xsd:element minOccurs="1" maxOccurs="1" name="IsDelivered" type="xsd:boolean" />
           <xsd:element minOccurs="1" maxOccurs="1" name="IsCancelled" type="xsd:boolean" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="LabelsURL" type="xsd:string" />
         </xsd:all>
       </xsd:complexType>
       <xsd:complexType name="ShipmentRequestType">
         <xsd:all>
-          <xsd:element minOccurs="1" maxOccurs="1" name="ServiceID" type="xsd:int" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="ServiceID" type="xsd:int" />
           <xsd:element minOccurs="1" maxOccurs="1" name="Parcels" type="tns:ArrayOfParcelType" />
           <xsd:element minOccurs="0" maxOccurs="1" name="ClientReference" type="xsd:string" />
-          <xsd:element minOccurs="1" maxOccurs="1" name="CollectionDate" type="tns:CollectionDateType" />
+          <xsd:element minOccurs="0" maxOccurs="1" name="CollectionDate" type="tns:CollectionDateType" />
           <xsd:element minOccurs="0" maxOccurs="1" name="SenderAddress" type="tns:SenderAddressType" />
           <xsd:element minOccurs="1" maxOccurs="1" name="RecipientAddress" type="tns:RecipientAddressType" />
           <xsd:element minOccurs="0" maxOccurs="1" name="FollowShipment" type="xsd:boolean" />
         </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="CollectionReturnType">
+        <xsd:all>
+          <xsd:element minOccurs="1" maxOccurs="1" name="CollectionID" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="CollectionDocumentID" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="CollectionType" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="CollectionDate" type="tns:CollectionDateType" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="SenderAddress" type="tns:SenderAddressType" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="Courier" type="tns:CourierType" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="LabelsURL" type="xsd:string" />
+          <xsd:element minOccurs="1" maxOccurs="1" name="ManifestURL" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfCollectionReturnType">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="tns:CollectionReturnType[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfShipmentID">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="xsd:string[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfShipmentReturnType">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="tns:ShipmentReturnType[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
       </xsd:complexType>
     </xsd:schema>
   </wsdl:types>
@@ -155,11 +193,27 @@
   <wsdl:message name="GetShipmentResponse">
     <wsdl:part name="return" type="tns:ShipmentReturnType" />
   </wsdl:message>
+  <wsdl:message name="GetCollectionRequest">
+    <wsdl:part name="CollectionID" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCollectionResponse">
+    <wsdl:part name="return" type="tns:CollectionReturnType" />
+  </wsdl:message>
+  <wsdl:message name="GetCollectionsRequest" />
+  <wsdl:message name="GetCollectionsResponse">
+    <wsdl:part name="return" type="tns:ArrayOfCollectionReturnType" />
+  </wsdl:message>
   <wsdl:message name="CancelShipmentRequest">
     <wsdl:part name="ShipmentID" type="xsd:string" />
   </wsdl:message>
   <wsdl:message name="CancelShipmentResponse">
     <wsdl:part name="Response" type="xsd:boolean" />
+  </wsdl:message>
+  <wsdl:message name="BookShipmentsRequest">
+    <wsdl:part name="ShipmentIDs" type="tns:ArrayOfShipmentID" />
+  </wsdl:message>
+  <wsdl:message name="BookShipmentsResponse">
+    <wsdl:part name="return" type="tns:ArrayOfShipmentReturnType" />
   </wsdl:message>
   <wsdl:portType name="ShippingServicePortType">
     <wsdl:operation name="GetAvailableServices">
@@ -182,10 +236,25 @@
       <wsdl:input message="tns:GetShipmentRequest" />
       <wsdl:output message="tns:GetShipmentResponse" />
     </wsdl:operation>
+    <wsdl:operation name="GetCollection">
+      <documentation>Returns an existing collection</documentation>
+      <wsdl:input message="tns:GetCollectionRequest" />
+      <wsdl:output message="tns:GetCollectionResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCollections">
+      <documentation>Returns existing active collections</documentation>
+      <wsdl:input message="tns:GetCollectionsRequest" />
+      <wsdl:output message="tns:GetCollectionsResponse" />
+    </wsdl:operation>
     <wsdl:operation name="CancelShipment">
       <documentation>Cancels an existing shipment if it has not already been despatched</documentation>
       <wsdl:input message="tns:CancelShipmentRequest" />
       <wsdl:output message="tns:CancelShipmentResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="BookShipments">
+      <documentation>Books existing shipments if they have not already been booked</documentation>
+      <wsdl:input message="tns:BookShipmentsRequest" />
+      <wsdl:output message="tns:BookShipmentsResponse" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ShippingServiceBinding" type="tns:ShippingServicePortType">
@@ -226,8 +295,35 @@
         <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetCollection">
+      <soap:operation soapAction="urn:despatchbay#GetCollection" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCollections">
+      <soap:operation soapAction="urn:despatchbay#GetCollections" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="CancelShipment">
       <soap:operation soapAction="urn:despatchbay#CancelShipment" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BookShipments">
+      <soap:operation soapAction="urn:despatchbay#BookShipments" style="rpc" />
       <wsdl:input>
         <soap:body use="encoded" namespace="urn:despatchbay" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
       </wsdl:input>
@@ -238,7 +334,7 @@
   </wsdl:binding>
   <wsdl:service name="ShippingService">
     <wsdl:port name="ShippingServicePort" binding="tns:ShippingServiceBinding">
-      <soap:address location="http://api.despatchbay.com/soap/v14/shipping.php" />
+      <soap:address location="http://api.despatchbay.com/soap/v15/shipping.php" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
